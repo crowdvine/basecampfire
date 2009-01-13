@@ -4,6 +4,7 @@ require 'simple-rss'
 require 'open-uri'
 require 'tinder'
 require 'yaml'
+require 'ruby-debug'
 
 class Basecampfire
   
@@ -77,13 +78,14 @@ class Basecampfire
   
   def walk_items
     basecamp.items.each do |item|
+      next unless item.title.match(/Todo completed/)
       next if guid_cache.seen?(item.guid)
       announce item
     end
   end
   
   def announce(item)
-    campfire_room.speak "#{item.title} (#{item.link})"
+    campfire_room.speak "#{item.title} - #{item.dc_creator} (#{item.link})"
     guid_cache.add! item.guid
   end
   
