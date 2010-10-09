@@ -66,27 +66,31 @@ class Basecampfire
   end
   
   def fetch_basecamp_feed
-    self.basecamp = SimpleRSS.parse open(config['basecamp']['rss_uri'],
-      :http_basic_authentication => [ config['basecamp']['login'], config['basecamp']['password'] ])
+    self.basecamp = SimpleRSS.parse open(config['basecamp']['rss_uri'], :http_basic_authentication => [ config['basecamp']['token'], "x" ])
   end
   
   def login_campfire
-    self.campfire = Tinder::Campfire.new config['campfire']['domain']
-    campfire.login config['campfire']['email'], config['campfire']['password']
+    campfire = Tinder::Campfire.new config['campfire']['domain'], :token => config['campfire']['token'] 
+    campfire.login config['campfire']['token'], 'x'
     self.campfire_room = campfire.find_room_by_name config['campfire']['room']
   end
   
   def walk_items
     basecamp.items.each do |item|
-      next unless item.title.match(/Todo completed/)
-      next if guid_cache.seen?(item.guid)
+puts item.title
+    #  next unless item.title.match(/Todo completed/)
+      next if guid_cache.seen?(item.title)
       announce item
     end
   end
   
   def announce(item)
-    campfire_room.speak "#{item.title} - #{item.dc_creator} (#{item.link})"
-    guid_cache.add! item.guid
+    project = "GENERAL"
+    if item.description.match(/Project: (.*?) \|/)
+      project = "#{$1}"
+    end
+    campfire_room.speak "[#{project}] #{item.title} - #{item.dc_creator} (#{item.link})"
+    guid_cache.add! item.title
   end
   
   def write_cache

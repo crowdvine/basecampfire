@@ -1,14 +1,14 @@
 ---
 basecamp:
   rss_uri:  http://YOURDOMAIN.projectpath.com/projects/PROJECT_ID/feed/recent_items_rss
-  login:    USERNAME_OR_OPENID
-  password: YOUR_PASSWORD
+  # OR, this is the feed for all of your projects
+  # rss_uri: http://crowdvine.basecamphq.com/feed/recent_items_rss
+  token:    YOUR_BASECAMP_AUTHENTICATION_TOKEN
 
 campfire:
-  domain:   YOUR_DOMAIN_WITHOUT_CAMPFIRENOW_DOT_COM
-  email:    YOUR@EMAIL.COM
-  password: YOUR_PASSWORD
+  domain:   YOUR_DOMAIN_WITHOUT_CAMPFIRENOW_DOT_COM (i.e. your subdomain)
   room:     ROOM_TO_POST_TO
+  token:    YOUR_CAMPFIRE_AUTHENTICATION_TOKEN
 
 # Relative to the main script
 cache_file: cached_guids.yml
